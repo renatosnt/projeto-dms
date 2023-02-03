@@ -1,0 +1,16 @@
+.header {
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  display: flex;
+  justify-content: space-between;
+}
+
+.logo {
+  width: 200px;
+  padding: 10px 0;
+}
+
+.home {
+  width: 30px;
+  opacity: 0.2;
+  margin: 20px;
+}

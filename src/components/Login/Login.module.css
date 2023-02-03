@@ -1,0 +1,31 @@
+.image {
+  padding-left: 45px;
+  display: block;
+}
+
+.login {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 200px;
+  align-items: center;
+  padding-top: 10rem;
+}
+
+.form {
+  position: relative;
+}
+
+.form::before {
+  content: "";
+  height: 70%;
+  width: 1px;
+  background-color: #e0e0e0;
+  position: absolute;
+  left: -100px;
+  top: 60px;
+}
+
+a {
+  display: block;
+  margin: 20px 0;
+}
