@@ -11,7 +11,6 @@ const Login = () => {
       <img
         className={styles.image}
         src="/hiring.svg"
-        // src="/online-document.svg"
         alt="Imagem representativa de uma pessoa gerenciando documentos"
       />
       <div className={styles.form}>

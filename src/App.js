@@ -1,6 +1,7 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import "./App.css";
 import Dashboard from "./components/Dashboard/Dashboard";
+import DocumentEdit from "./components/Document/DocumentEdit";
 import Header from "./components/Header";
 import Login from "./components/Login/Login";
 import Private from "./Private";
@@ -21,6 +22,8 @@ function App() {
               </Private>
             }
           />
+          <Route path="/edit" element={<DocumentEdit />} /> // TODO make it
+          private!!!!
         </Routes>
       </BrowserRouter>
     </div>
