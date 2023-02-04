@@ -3,6 +3,7 @@ import React from "react";
 import DocumentPage from "./DocumentPage";
 import styles from "./DocumentEdit.module.css";
 import useForm from "./../../Hooks/useForm";
+import ReactPDF, { PDFViewer, renderToStream } from "@react-pdf/renderer";
 const DocumentEdit = () => {
   const name = useForm();
   const gender = useForm();
@@ -14,6 +15,17 @@ const DocumentEdit = () => {
   const admissionDate = useForm();
   const sector = useForm();
   const salary = useForm();
+
+  // React.useEffect(() => {
+  //   function getStream() {
+  //     const teste = ReactPDF.render(
+  //       <DocumentPage />,
+  //       `${__dirname}/example.pdf`
+  //     );
+  //     console.log(teste);
+  //   }
+  //   getStream();
+  // });
 
   return (
     <div className={styles.editWrapper}>
@@ -39,22 +51,24 @@ const DocumentEdit = () => {
       </div>
 
       {/* COMPONENTE DO PDF */}
-      <div className={styles.bg}>
-        <div className={styles.pdfWrapper}>
-          <DocumentPage
-            name={name.value}
-            gender={gender.value}
-            address={address.value}
-            phoneNumber={phoneNumber.value}
-            photo={photo.value}
-            birthDate={birthDate.value}
-            role={role.value}
-            admissionDate={admissionDate.value}
-            sector={sector.value}
-            salary={salary.value}
-          />
-        </div>
-      </div>
+      {/* <div className={styles.bg}> */}
+      {/* <div className={styles.pdfWrapper}> */}
+      <PDFViewer className={styles.pdfViewer}>
+        <DocumentPage
+          name={name.value}
+          gender={gender.value}
+          address={address.value}
+          phoneNumber={phoneNumber.value}
+          photo={photo.value}
+          birthDate={birthDate.value}
+          role={role.value}
+          admissionDate={admissionDate.value}
+          sector={sector.value}
+          salary={salary.value}
+        />
+      </PDFViewer>
+      {/* </div> */}
+      {/* </div> */}
     </div>
   );
 };
