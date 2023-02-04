@@ -6,7 +6,6 @@ const useForm = () => {
   const [error, setError] = React.useState(null);
 
   function validate() {
-    setError("Preencha a senha");
     // TODO provavelmente será feito no firebase
     // validação com erros de email invalido
     // validação com erro de senha fraca

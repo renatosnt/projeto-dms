@@ -15,7 +15,7 @@ const LoginForm = () => {
         <Input label="Password" name="password" type="password" {...password} />
         <Button>Entrar</Button>
         <a href="/login/perdeu">Perdeu a senha?</a>
-        <a href="/login/criar">Ainda não possui uma conta? Cadastre-se</a>
+        <a href="/login/registrar">Ainda não possui uma conta? Cadastre-se</a>
       </form>
     </div>
   );

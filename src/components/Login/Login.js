@@ -2,7 +2,7 @@ import React from "react";
 import { Route, Routes } from "react-router-dom";
 import styles from "./Login.module.css";
 import LoginForm from "./LoginForm";
-import LoginCreate from "./LoginCreate";
+import SignUp from "./SignUp";
 import LoginPasswordLost from "./LoginPasswordLost";
 
 const Login = () => {
@@ -17,7 +17,7 @@ const Login = () => {
       <div className={styles.form}>
         <Routes>
           <Route path="/" element={<LoginForm />} />
-          <Route path="/criar" element={<LoginCreate />} />
+          <Route path="/registrar" element={<SignUp />} />
           <Route path="/perdeu" element={<LoginPasswordLost />} />
         </Routes>
       </div>
