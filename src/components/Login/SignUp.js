@@ -6,12 +6,14 @@ import styles from "./LoginForm.module.css";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../../firebaseConnection";
 import { useNavigate } from "react-router-dom";
+
 const SignUp = () => {
   const email = useForm();
   const password = useForm();
   const passwordConfirmation = useForm();
   const [signUpError, setSignUpError] = React.useState(null);
   const navigate = useNavigate();
+
   async function handleSignUp(e) {
     e.preventDefault();
     console.log(email.value);
