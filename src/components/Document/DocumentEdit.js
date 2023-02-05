@@ -15,7 +15,9 @@ import SaveIcon from "@mui/icons-material/Save";
 import { addDoc, collection } from "firebase/firestore";
 import { db, app } from "../../firebaseConnection";
 import { FirebaseError } from "firebase/app";
-
+import { useNavigate, useParams } from "react-router-dom";
+import IconButton from "@mui/material/IconButton";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 function blobToBase64(blob) {
   return new Promise((resolve, _) => {
     const reader = new FileReader();
@@ -36,7 +38,18 @@ const DocumentEdit = () => {
   const sector = useForm();
   const salary = useForm();
 
+  const navigate = useNavigate();
   const [instance, updateInstance] = usePDF({ document: <DocumentPage /> });
+  const { id } = useParams();
+  const [createMode, setCreateMode] = React.useState(false);
+  const [editMode, setEditMode] = React.useState(false);
+  React.useEffect(() => {
+    if (id) {
+      setEditMode(true);
+    } else {
+      setCreateMode(true);
+    }
+  }, []);
 
   async function handleSave(e) {
     e.preventDefault();
@@ -68,6 +81,20 @@ const DocumentEdit = () => {
   return (
     <div className={styles.editWrapper}>
       <div className={styles.form}>
+        <IconButton
+          onClick={() => {
+            navigate("/funcionarios");
+          }}
+          color="primary"
+          aria-label="upload picture"
+          component="label"
+        >
+          <ArrowBackIcon />
+        </IconButton>
+
+        {createMode && <h1>Adicionar novo funcionário</h1>}
+        {editMode && <h1>Editando funcionário {id}</h1>}
+
         <form onSubmit={handleSave}>
           <Input label="Nome" name="nome" type="text" {...name} />
           <Input label="Sexo" name="sexo" type="select" {...gender} />

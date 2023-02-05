@@ -23,7 +23,7 @@ const SignUp = () => {
     await createUserWithEmailAndPassword(auth, email.value, password.value)
       .then((userCredential) => {
         console.log("registrado ", userCredential);
-        navigate("/dashboard", { replace: true });
+        navigate("/funcionarios", { replace: true });
       })
       .catch((error) => {
         console.log("erro ", error.code);

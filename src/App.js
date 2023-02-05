@@ -1,10 +1,10 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import "./App.css";
-import Dashboard from "./components/Dashboard/Dashboard";
 import DocumentEdit from "./components/Document/DocumentEdit";
 import Header from "./components/Header";
 import Login from "./components/Login/Login";
 import Private from "./Private";
+import Employees from "./components/Employees/Employees";
 
 function App() {
   return (
@@ -15,15 +15,13 @@ function App() {
           {/* <Route path="/" element={<Home/>} /> // landing page, se der tempo */}
           <Route path="/login/*" element={<Login />} />
           <Route
-            path="/dashboard"
+            path="/funcionarios/*"
             element={
               <Private>
-                <Dashboard />
+                <Employees />
               </Private>
             }
           />
-          <Route path="/edit" element={<DocumentEdit />} /> // TODO make it
-          private!!!!
         </Routes>
       </BrowserRouter>
     </div>
