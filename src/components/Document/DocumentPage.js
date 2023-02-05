@@ -14,13 +14,10 @@ const styles = StyleSheet.create({
     padding: "40px",
   },
   title: {
-    fontSize: "2rem",
     display: "block",
-    paddingLeft: "3rem",
   },
   text: {
     display: "block",
-    paddingLeft: "5rem",
   },
 });
 

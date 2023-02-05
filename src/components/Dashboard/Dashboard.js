@@ -16,9 +16,17 @@ const Dashboard = () => {
         snapshot.forEach((doc) => {
           listOfEmployees.push({
             id: doc.id,
-            nome: doc.data().nome,
-            idade: doc.data().idade,
-            cidade: doc.data().cidade,
+            name: doc.data().name,
+            gender: doc.data().gender,
+            address: doc.data().address,
+            phoneNumber: doc.data().phoneNumber,
+            photo: doc.data().photo,
+            birthDate: doc.data().birthDate,
+            role: doc.data().role,
+            admissionDate: doc.data().admissionDate,
+            sector: doc.data().sector,
+            salary: doc.data().salary,
+            pdf: doc.data().pdf,
           });
         });
         setEmployees(listOfEmployees);
@@ -32,22 +40,24 @@ const Dashboard = () => {
       <caption>Funcionários</caption>
       <thead>
         <tr>
-          {employees[0] &&
-            Object.keys(employees[0]).map((header, key) => (
-              <th key={key}>{header}</th>
-            ))}
-          <th>Detalhes</th>
+          <th>ID</th>
+          <th>Nome</th>
+          <th>Endereço</th>
+          <th>Salário</th>
         </tr>
       </thead>
       <tbody>
         {employees.map((employee) => (
           <tr key={employee.id}>
+            {console.log(employee)}
             <td>{employee.id}</td>
-            <td>{employee.nome}</td>
-            <td>{employee.idade}</td>
-            <td>{employee.cidade}</td>
+            <td>{employee.name}</td>
+            <td>{employee.address}</td>
+            <td>{employee.salary}</td>
             <td>
               <IconButton
+                // TODO AO CLICAR AQUI, REDIRECIONA PARA A EDIÇÂO DO PDF DO USUÁRIO, se salvar a edição, o conteudo do campo pdf é sobrescrito na firestore.
+
                 color="primary"
                 aria-label="editar documentos"
                 // component="label"
