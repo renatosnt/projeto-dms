@@ -9,15 +9,20 @@ import ReactPDF, {
   renderToStream,
   PDFDownloadLink,
   usePDF,
+  pdf,
 } from "@react-pdf/renderer";
+import "./Example.css";
 import { Button } from "@mui/material";
 import SaveIcon from "@mui/icons-material/Save";
-import { addDoc, collection } from "firebase/firestore";
+import { addDoc, collection, doc, getDoc } from "firebase/firestore";
 import { db, app } from "../../firebaseConnection";
 import { FirebaseError } from "firebase/app";
 import { useNavigate, useParams } from "react-router-dom";
 import IconButton from "@mui/material/IconButton";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import { Document, Page } from "react-pdf";
+import { pdfjs } from "react-pdf";
+pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.js`;
 function blobToBase64(blob) {
   return new Promise((resolve, _) => {
     const reader = new FileReader();
@@ -25,7 +30,11 @@ function blobToBase64(blob) {
     reader.readAsDataURL(blob);
   });
 }
-
+const options = {
+  cMapUrl: "cmaps/",
+  cMapPacked: true,
+  standardFontDataUrl: "standard_fonts/",
+};
 const DocumentEdit = () => {
   const name = useForm();
   const gender = useForm();
@@ -43,25 +52,64 @@ const DocumentEdit = () => {
   const { id } = useParams();
   const [createMode, setCreateMode] = React.useState(false);
   const [editMode, setEditMode] = React.useState(false);
+  const [file, setFile] = React.useState(null);
+  const [numPages, setNumPages] = React.useState(null);
+  const refDocument = React.useRef(null);
+  async function base64ToBlob(base64) {
+    let response = await fetch(base64);
+    let pdf = await response.blob();
+    return pdf;
+  }
+
   React.useEffect(() => {
-    if (id) {
-      setEditMode(true);
-    } else {
-      setCreateMode(true);
+    async function handleEmployeeData() {
+      if (id) {
+        setEditMode(true);
+        // TODO puxar pdf do banco de dados
+
+        const docRef = doc(db, "funcionarios", id);
+        const docSnap = await getDoc(docRef);
+        if (docSnap.exists()) {
+          let pdfBase64 = docSnap.data().pdf;
+          console.log("pdf obtido do db", pdfBase64);
+          setFile(pdfBase64);
+          console.log("file", file);
+          // const temp = await base64ToBlob(docSnap.data().pdf);
+          // console.log(pdf(DocumentPage));
+          // instance.blob = temp;
+        } else {
+          console.log("funcionario não existe");
+        }
+      } else {
+        setCreateMode(true);
+      }
     }
+
+    handleEmployeeData();
   }, []);
 
   async function handleSave(e) {
     e.preventDefault();
-    // const base64 = await blobToBase64(instance.blob).then(async (base64) => {
-    //   console.log(base64);
-    //   await fetch(base64).then(async (response) => {
-    //     await response.blob().then((bl) => {
-    //       console.log(bl);
-    //     });
-    //   });
-    // });
-    await blobToBase64(instance.blob).then((pdf) => {
+
+    const element = (
+      <DocumentPage
+        name={name.value}
+        gender={gender.value}
+        address={address.value}
+        phoneNumber={phoneNumber.value}
+        photo={photo.value}
+        birthDate={birthDate.value}
+        role={role.value}
+        admissionDate={admissionDate.value}
+        sector={sector.value}
+        salary={salary.value}
+      />
+    );
+
+    let myPDF = pdf(element);
+    let myBlob = await myPDF.toBlob();
+
+    await blobToBase64(myBlob).then((pdf) => {
       const docRef = addDoc(collection(db, "funcionarios"), {
         name: name.value,
         gender: gender.value,
@@ -136,6 +184,23 @@ const DocumentEdit = () => {
           salary={salary.value}
         />
       </PDFViewer>
+
+      {console.log(refDocument.current)}
+
+      {/* <div className="Example">
+        <header>
+          <h1>react-pdf sample page</h1>
+        </header>
+        <div className="Example__container">
+          <div className="Example__container__document">
+            <Document file={file} options={options}>
+              {Array.from(new Array(numPages), (el, index) => (
+                <Page key={`page_${index + 1}`} pageNumber={index + 1} />
+              ))}
+            </Document>
+          </div>
+        </div>
+      </div> */}
       {/* </div> */}
       {/* </div> */}
     </div>

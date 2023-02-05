@@ -6,6 +6,7 @@ import {
   Document,
   StyleSheet,
   renderToStream,
+  pdf,
 } from "@react-pdf/renderer";
 
 const styles = StyleSheet.create({
