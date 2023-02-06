@@ -1,8 +1,9 @@
 import { signInWithEmailAndPassword } from "firebase/auth";
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import { auth } from "../../firebaseConnection";
+
 import useForm from "../../Hooks/useForm";
+import { auth } from "../../services/firebase";
 import Button from "../Forms/Button";
 import Input from "../Forms/Input";
 import styles from "./LoginForm.module.css";

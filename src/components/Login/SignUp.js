@@ -4,9 +4,8 @@ import Button from "../Forms/Button";
 import Input from "../Forms/Input";
 import styles from "./LoginForm.module.css";
 import { createUserWithEmailAndPassword } from "firebase/auth";
-import { auth } from "../../firebaseConnection";
 import { useNavigate } from "react-router-dom";
-
+import { auth } from "../../services/firebase";
 const SignUp = () => {
   const email = useForm();
   const password = useForm();

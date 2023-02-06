@@ -1,15 +1,19 @@
 import React from "react";
 import { Avatar, Button } from "@mui/material";
 import Input from "../Forms/Input";
+
 import SaveIcon from "@mui/icons-material/Save";
 import styles from "./DocumentForm.module.css";
+import Select from "../Forms/Select";
+import UploadImage from "../Forms/UploadImage";
 const DocumentForm = ({
   handleSave,
   name,
   gender,
   address,
   phoneNumber,
-  photo,
+  setPhoto,
+  photoUrl,
   birthDate,
   role,
   admissionDate,
@@ -20,41 +24,48 @@ const DocumentForm = ({
     <form className={styles.form} onSubmit={handleSave}>
       <div className={styles.fieldsContainer}>
         <div>
-          <Input label="Nome" name="nome" type="text" {...name} />
-          <Input label="Cargo" name="nome" type="select" {...role} />
+          <Input required label="Nome" name="nome" type="text" {...name} />
+          <Select
+            required
+            label="Cargo"
+            name="role"
+            options={[
+              "Gerente",
+              "Desenvolvedor Front-End",
+              "Estagiário",
+              "Analista",
+            ]}
+            {...role}
+          />
         </div>
+
         <div>
-          <Avatar
-            className={styles.avatar}
-            alt="avatar"
-            src="/avatar.svg"
-            sx={{ width: "10rem", height: "10rem" }}
-          />
-          <input
-            accept="image/*"
-            className={styles.input}
-            style={{ display: "none" }}
-            id="raised-button-file"
-            multiple
-            type="file"
-          />
-          <label htmlFor="raised-button-file">
-            <Button variant="raised" component="span" className={styles.button}>
-              Upload
-            </Button>
-          </label>
-          {/* <Input label="Foto de Perfil" name="nome" type="file" {...photo} /> */}
+          <UploadImage photoUrl={photoUrl} setPhoto={setPhoto} />
         </div>
       </div>
 
       <div className={styles.fieldsContainer}>
-        <Input label="Setor" name="nome" type="select" {...sector} />
-        <Input label="Salário" name="nome" type="number" {...salary} />
+        <Select
+          required
+          label="Setor"
+          name="sector"
+          options={["Financeiro", "RH", "Desenvolvimento"]}
+          {...sector}
+        />
+        <Input
+          required
+          label="Salário"
+          name="salary"
+          type="number"
+          placeholder="Sem R$"
+          {...salary}
+        />
       </div>
 
       <Input
+        required
         label="Endereço"
-        name="nome"
+        name="address"
         type="text"
         placeholder="Rua Fulano de Tal, nº 100, Bairro X"
         {...address}
@@ -62,22 +73,39 @@ const DocumentForm = ({
 
       <div className={styles.fieldsContainer}>
         <Input
+          required
           label="Data de Admissão"
-          name="nome"
+          name="admission"
           type="date"
           {...admissionDate}
         />
         <Input
+          required
           label="Telefone"
-          name="nome"
+          name="phone"
           type="tel"
           placeholder="(99) - 99999-9999"
           {...phoneNumber}
         />
-        <Input label="Sexo" name="sexo" type="select" {...gender} />
-        <Input label="Nascimento" name="nome" type="date" {...birthDate} />
+        <Select
+          required
+          label="Sexo"
+          name="gender"
+          options={["Masculino", "Feminino"]}
+          {...gender}
+        />
+        <Input
+          required
+          label="Nascimento"
+          name="birth"
+          type="date"
+          {...birthDate}
+        />
       </div>
       <div className={styles.saveOptions}>
+        <Button variant="contained" endIcon={<SaveIcon />}>
+          Baixar PDF
+        </Button>
         <Button type="submit" variant="contained" endIcon={<SaveIcon />}>
           Salvar
         </Button>

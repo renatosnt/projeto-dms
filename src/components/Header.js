@@ -3,8 +3,9 @@ import styles from "./Header.module.css";
 import LogoutIcon from "@mui/icons-material/Logout";
 import { IconButton } from "@mui/material";
 import { signOut } from "firebase/auth";
-import { auth } from "../firebaseConnection";
+
 import { useNavigate } from "react-router-dom";
+import { auth } from "../services/firebase";
 const Header = () => {
   const navigate = useNavigate();
   async function handleLogout() {

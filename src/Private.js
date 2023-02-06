@@ -1,8 +1,8 @@
 import React from "react";
 
 import { onAuthStateChanged } from "firebase/auth";
-import { auth } from "./firebaseConnection";
 import { Navigate } from "react-router-dom";
+import { auth } from "./services/firebase";
 
 const Private = ({ children }) => {
   const [loading, setLoading] = React.useState(true);

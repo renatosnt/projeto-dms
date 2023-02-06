@@ -5,6 +5,7 @@ import {
   View,
   Document,
   StyleSheet,
+  Image,
   renderToStream,
   pdf,
 } from "@react-pdf/renderer";
@@ -29,6 +30,15 @@ const DocumentPage = (props) => {
         <View style={styles.section}>
           {/* Informações do Funcionário: Cargo, Data de Admissão, Setor,
 Salário. */}
+          {/* <Image
+            src={props.photoUrl + `?noCache=`}
+            source={{
+              header: {
+                "Access-Control-Allow-Origin": "*",
+              },
+            }}
+          /> */}
+          {console.log("photo", props.photoUrl)}
           <Text style={styles.title}>Informações de Contato</Text>
           <Text style={styles.text}>Nome: {props.name}</Text>
           <Text style={styles.text}>Sexo: {props.gender}</Text>

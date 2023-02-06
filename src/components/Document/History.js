@@ -1,6 +1,6 @@
 import { doc, getDoc } from "firebase/firestore";
 import React from "react";
-import { db } from "../../firebaseConnection";
+import { db } from "../../services/firebase";
 import styles from "./History.module.css";
 const History = ({ id }) => {
   const [history, setHistory] = React.useState([]);

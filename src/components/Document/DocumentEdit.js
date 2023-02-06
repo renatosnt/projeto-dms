@@ -6,6 +6,9 @@ import styles from "./DocumentEdit.module.css";
 import useForm from "./../../Hooks/useForm";
 import { PDFViewer, pdf } from "@react-pdf/renderer";
 
+import { storage } from "../../services/firebase";
+import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
+
 import {
   addDoc,
   arrayUnion,
@@ -17,11 +20,12 @@ import {
   setDoc,
   updateDoc,
 } from "firebase/firestore";
-import { db } from "../../firebaseConnection";
+import { db } from "../../services/firebase";
 import { useNavigate, useParams } from "react-router-dom";
 
 import DocumentForm from "./DocumentForm";
 import Menu from "./Menu";
+import { getPhotoUrl, uploadPhoto } from "../../services/StorageService";
 
 function blobToBase64(blob) {
   return new Promise((resolve, _) => {
@@ -42,20 +46,22 @@ const DocumentEdit = () => {
   const gender = useForm();
   const address = useForm();
   const phoneNumber = useForm();
-  const photo = useForm();
   const birthDate = useForm();
   const role = useForm();
   const admissionDate = useForm();
   const sector = useForm();
   const salary = useForm();
 
+  const [photo, setPhoto] = React.useState(null);
+  const [photoUrl, setPhotoUrl] = React.useState(null);
+
   const data = {
     name: name.value,
     gender: gender.value,
     address: address.value,
     phoneNumber: phoneNumber.value,
-    photo: photo.value,
     birthDate: birthDate.value,
+    photoUrl: photoUrl,
     role: role.value,
     admissionDate: admissionDate.value,
     sector: sector.value,
@@ -66,13 +72,13 @@ const DocumentEdit = () => {
     gender: gender,
     address: address,
     phoneNumber: phoneNumber,
-    photo: photo,
     birthDate: birthDate,
     role: role,
     admissionDate: admissionDate,
     sector: sector,
     salary: salary,
   };
+
   const navigate = useNavigate();
   const { id } = useParams();
 
@@ -90,6 +96,14 @@ const DocumentEdit = () => {
             const [key, value] = entry;
             value.setValue(docSnap.data()[key]);
           });
+
+          //get photo
+          setPhotoUrl(getPhotoUrl(id));
+          // await getDownloadURL(ref(storage, `employee/${id + ".jpeg"}`)).then(
+          //   (url) => {
+          //     setPhotoUrl(url);
+          //   }
+          // );
         } else {
           console.log("funcionario não existe");
         }
@@ -128,6 +142,13 @@ const DocumentEdit = () => {
         });
       });
     }
+    // await getDoc(doc(db, "funcionarios", myID)).then((docSnap) => {
+    //   if (docSnap.data().photoUrl !== photoUrl) {
+    //   }
+    // });
+    if (photo) {
+      uploadPhoto(photo, myID);
+    }
     const docRef = doc(db, "historico", myID);
     await setDoc(
       docRef,
@@ -150,14 +171,19 @@ const DocumentEdit = () => {
     <div className={styles.editWrapper}>
       <div className={styles.formWrapper}>
         <Menu id={id} name={`${data.name}`} />
-        <DocumentForm handleSave={handleSave} {...dataForm} />
+        <DocumentForm
+          photoUrl={photoUrl}
+          setPhoto={setPhoto}
+          handleSave={handleSave}
+          {...dataForm}
+        />
         <hr></hr>
         {id && <History id={id} />}
       </div>
 
-      {/* <PDFViewer className={styles.pdfViewer}> */}
-      {/* <DocumentPage {...data} /> */}
-      {/* </PDFViewer> */}
+      <PDFViewer className={styles.pdfViewer}>
+        <DocumentPage {...data} />
+      </PDFViewer>
 
       <div className={styles.bg}>
         <div className={styles.pdfWrapper}>

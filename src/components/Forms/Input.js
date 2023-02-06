@@ -9,6 +9,7 @@ const Input = ({
   error,
   onChange,
   placeholder,
+  ...props
 }) => {
   return (
     <div className={styles.wrapper}>
@@ -23,6 +24,7 @@ const Input = ({
         value={value}
         onChange={onChange}
         placeholder={placeholder}
+        {...props}
       />
       {error && <span className={styles.error}>{error}</span>}
     </div>
