@@ -52,40 +52,40 @@ const Employees = () => {
       <Button onClick={goToCreate} variant="contained" endIcon={<AddBoxIcon />}>
         Adicionar
       </Button>
-      <table className="container">
-        <caption>Funcionários</caption>
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>Nome</th>
-            <th>Endereço</th>
-            <th>Salário</th>
-          </tr>
-        </thead>
-        <tbody>
-          {employees.map((employee) => (
-            <tr key={employee.id}>
-              {console.log(employee)}
-              <td>{employee.id}</td>
-              <td>{employee.name}</td>
-              <td>{employee.address}</td>
-              <td>{employee.salary}</td>
-              <td>
-                <IconButton
-                  // TODO AO CLICAR AQUI, REDIRECIONA PARA A EDIÇÂO DO PDF DO USUÁRIO, se salvar a edição, o conteudo do campo pdf é sobrescrito na firestore.
-                  onClick={() => goToEditMode(employee.id)}
-                  color="primary"
-                  aria-label="editar documentos"
-                  // component="label"
-                >
-                  {/* <input hidden accept="image/*" type="file" /> */}
-                  <EditIcon />
-                </IconButton>
-              </td>
+      <div className="table-employees container">
+        <table>
+          <thead>
+            <tr>
+              <th>Foto</th>
+              <th>Nome</th>
+              <th>Endereço</th>
+              <th>Salário</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {employees.map((employee) => (
+              <tr key={employee.id}>
+                <td>{employee.id}</td>
+                <td>{employee.name}</td>
+                <td>{employee.address}</td>
+                <td>{employee.salary}</td>
+                <td>
+                  <IconButton
+                    // TODO AO CLICAR AQUI, REDIRECIONA PARA A EDIÇÂO DO PDF DO USUÁRIO, se salvar a edição, o conteudo do campo pdf é sobrescrito na firestore.
+                    onClick={() => goToEditMode(employee.id)}
+                    color="primary"
+                    aria-label="editar documentos"
+                    // component="label"
+                  >
+                    {/* <input hidden accept="image/*" type="file" /> */}
+                    <EditIcon />
+                  </IconButton>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 };

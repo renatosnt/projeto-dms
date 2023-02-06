@@ -2,11 +2,10 @@
   display: grid;
   grid-template-columns: 1fr 1fr;
   margin: 0 auto;
-  padding-left: 5rem;
 }
 
-.form {
-  padding-top: 5rem;
+.formWrapper {
+  padding: 5rem 5rem;
 }
 
 .pdfWrapper {

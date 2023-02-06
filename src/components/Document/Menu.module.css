@@ -1,0 +1,10 @@
+.menuButtons {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 30px;
+}
+
+.menuHeader {
+  padding-bottom: 30px;
+}

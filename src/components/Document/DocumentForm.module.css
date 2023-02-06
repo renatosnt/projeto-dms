@@ -1,0 +1,19 @@
+.form {
+  margin-bottom: 5rem;
+}
+
+.fieldsContainer {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 30px;
+  align-items: end;
+}
+.avatar {
+  margin: 0 auto;
+}
+
+.saveOptions {
+  margin-top: 10px;
+  display: flex;
+  justify-content: end;
+}
