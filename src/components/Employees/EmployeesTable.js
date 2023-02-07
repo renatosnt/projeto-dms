@@ -50,12 +50,17 @@ const Employees = () => {
   }
 
   const columns = [
-    { field: "id", headerName: "ID" },
+    {
+      field: "id",
+      headerName: "ID",
+      headerClassName: "header",
+      headerAlign: "center",
+    },
     { field: "photo", headerName: "Foto" },
-    { field: "name", headerName: "Nome", width: 300 },
-    { field: "role", headerName: "Cargo", width: 300 },
-    { field: "sector", headerName: "Setor", width: 600 },
-    { field: "salary", headerName: "Salário", width: 600 },
+    { field: "name", headerName: "Nome" },
+    { field: "role", headerName: "Cargo" },
+    { field: "sector", headerName: "Setor" },
+    { field: "salary", headerName: "Salário" },
   ];
 
   const rows = employees.map((employee) => {
@@ -70,10 +75,16 @@ const Employees = () => {
   });
   return (
     <div className="container">
-      <Button onClick={goToCreate} variant="contained" endIcon={<AddBoxIcon />}>
-        Adicionar
-      </Button>
-      <div className={styles.table} style={{ height: 300, width: "100%" }}>
+      <div className={styles.menu}>
+        <Button
+          onClick={goToCreate}
+          variant="contained"
+          endIcon={<AddBoxIcon />}
+        >
+          Adicionar
+        </Button>
+      </div>
+      <div className={styles.tableWrapper}>
         <table>
           <thead>
             <tr>
@@ -82,12 +93,15 @@ const Employees = () => {
               <th>Cargo</th>
               <th>Setor</th>
               <th>Salário</th>
+              <th>Contrato Ativo</th>
+              <th>Editar</th>
             </tr>
           </thead>
           <tbody>
             {employees.map((employee) => (
               <tr key={employee.id}>
-                <td>
+                {console.log(employee.active)}
+                <td className={styles.avatar}>
                   <Avatar src={employee.photoUrl}></Avatar>
                   {console.log(employee.name, employee.photoUrl)}
                 </td>
@@ -95,15 +109,13 @@ const Employees = () => {
                 <td>{employee.role}</td>
                 <td>{employee.sector}</td>
                 <td>{employee.salary}</td>
+                <td>{employee.active === "Ativo" ? "Sim" : "Não"}</td>
                 <td>
                   <IconButton
-                    // TODO AO CLICAR AQUI, REDIRECIONA PARA A EDIÇÂO DO PDF DO USUÁRIO, se salvar a edição, o conteudo do campo pdf é sobrescrito na firestore.
                     onClick={() => goToEditMode(employee.id)}
                     color="primary"
                     aria-label="editar documentos"
-                    // component="label"
                   >
-                    {/* <input hidden accept="image/*" type="file" /> */}
                     <EditIcon />
                   </IconButton>
                 </td>
@@ -112,7 +124,18 @@ const Employees = () => {
           </tbody>
         </table>
 
-        {/* <DataGrid rows={rows} columns={columns} /> */}
+        {/* <DataGrid
+          sx={{
+            boxShadow: 2,
+            border: 2,
+            borderColor: "primary.light",
+            "& .MuiDataGrid-cell:hover": {
+              color: "primary.main",
+            },
+          }}
+          rows={rows}
+          columns={columns}
+        /> */}
       </div>
     </div>
   );

@@ -30,10 +30,10 @@ const DocumentEdit = () => {
   const admissionDate = useForm();
   const sector = useForm();
   const salary = useForm();
+  const active = useForm();
 
   const [photo, setPhoto] = React.useState(null);
   const [photoUrl, setPhotoUrl] = React.useState(null);
-  const [active, setActive] = React.useState(true);
 
   const data = {
     name: name.value,
@@ -46,7 +46,7 @@ const DocumentEdit = () => {
     admissionDate: admissionDate.value,
     sector: sector.value,
     salary: salary.value,
-    active: active,
+    active: active.value,
   };
   const dataForm = {
     name: name,
@@ -58,6 +58,7 @@ const DocumentEdit = () => {
     admissionDate: admissionDate,
     sector: sector,
     salary: salary,
+    active: active,
   };
 
   const navigate = useNavigate();
@@ -69,6 +70,7 @@ const DocumentEdit = () => {
 
   async function handleSave(e) {
     e.preventDefault();
+
     let myID = null;
     if (!id) {
       myID = await createEmployee(data);
@@ -94,7 +96,6 @@ const DocumentEdit = () => {
         <Menu id={id} name={`${data.name}`} />
         <DocumentForm
           id={id}
-          setActive={setActive}
           photoUrl={photoUrl}
           setPhoto={setPhoto}
           handleSave={handleSave}

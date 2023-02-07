@@ -16,8 +16,13 @@
   margin: 0 auto;
 }
 
+.options {
+  display: flex;
+  gap: 20px;
+}
 .saveOptions {
   margin-top: 10px;
   display: flex;
-  justify-content: space-between;
+  justify-content: end;
+  gap: 20px;
 }

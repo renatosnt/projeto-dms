@@ -9,10 +9,14 @@ import Select from "../Forms/Select";
 import UploadImage from "../Forms/UploadImage";
 import { deleteEmployee } from "../../services/DatabaseService";
 import { useNavigate } from "react-router-dom";
+import DeleteIcon from "@mui/icons-material/Delete";
+import DownloadIcon from "@mui/icons-material/Download";
+import CancelIcon from "@mui/icons-material/Cancel";
 const DocumentForm = ({
   handleSave,
   name,
-  setActive,
+  active,
+
   gender,
   address,
   phoneNumber,
@@ -48,10 +52,6 @@ const DocumentForm = ({
     navigate("/funcionarios");
   }
 
-  async function handleCancelContract() {
-    //TODO
-    setActive(false);
-  }
   return (
     <form className={styles.form} onSubmit={handleSave}>
       <div className={styles.fieldsContainer}>
@@ -134,29 +134,34 @@ const DocumentForm = ({
           {...birthDate}
         />
       </div>
-      <div className={styles.saveOptions}>
-        <Button
-          onClick={downloadPDF}
-          variant="contained"
-          endIcon={<SaveIcon />}
-        >
-          Baixar PDF
-        </Button>
-        <Button
-          onClick={handleDelete}
-          variant="contained"
-          endIcon={<SaveIcon />}
-        >
-          Excluir
-        </Button>
+      <Select
+        label="Contrato"
+        name="contract"
+        options={["Selecione", "Ativo", "Inativo"]}
+        {...active}
+      />
 
-        <Button
-          onClic={handleCancelContract}
-          variant="contained"
-          endIcon={<SaveIcon />}
-        >
-          Terminar Contrato
-        </Button>
+      <div className={styles.saveOptions}>
+        {id && (
+          <div className={styles.options}>
+            <Button
+              onClick={handleDelete}
+              variant="contained"
+              endIcon={<DeleteIcon />}
+              sx={{ bgcolor: "#C04949" }}
+            >
+              Excluir
+            </Button>
+
+            <Button
+              onClick={downloadPDF}
+              variant="contained"
+              endIcon={<DownloadIcon />}
+            >
+              Baixar PDF
+            </Button>
+          </div>
+        )}
         <Button type="submit" variant="contained" endIcon={<SaveIcon />}>
           Salvar
         </Button>

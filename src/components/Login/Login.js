@@ -1,11 +1,18 @@
 import React from "react";
-import { Route, Routes } from "react-router-dom";
+import { Route, Routes, useNavigate } from "react-router-dom";
 import styles from "./Login.module.css";
 import LoginForm from "./LoginForm";
 import SignUp from "./SignUp";
-import LoginPasswordLost from "./LoginPasswordLost";
 
 const Login = () => {
+  const navigate = useNavigate();
+  React.useEffect(() => {
+    const userData = localStorage.getItem("@detailUser");
+    if (userData) {
+      navigate("/funcionarios");
+    }
+  }, []);
+
   return (
     <div className={`${styles.login} container`}>
       <img
@@ -17,7 +24,6 @@ const Login = () => {
         <Routes>
           <Route path="/" element={<LoginForm />} />
           <Route path="/registrar" element={<SignUp />} />
-          <Route path="/perdeu" element={<LoginPasswordLost />} />
         </Routes>
       </div>
     </div>

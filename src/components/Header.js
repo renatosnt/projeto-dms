@@ -8,10 +8,20 @@ import { useNavigate } from "react-router-dom";
 import { auth } from "../services/firebase";
 const Header = () => {
   const navigate = useNavigate();
+  const [user, setUser] = React.useState(null);
+
+  React.useEffect(() => {
+    if (localStorage.getItem("@detailUser")) {
+      const userData = JSON.parse(localStorage.getItem("@detailUser"));
+      setUser(userData);
+    }
+  }, []);
+
   async function handleLogout() {
     signOut(auth)
       .then(() => {
-        console.log("deslogado");
+        localStorage.removeItem("@detailUser");
+        setUser(null);
         navigate("/");
       })
       .catch((error) => {
@@ -23,9 +33,19 @@ const Header = () => {
       <img className={styles.logo} src="/marca-taugor.png" alt="Taugor logo" />
       <div>
         {/* <img className={styles.home} src="/house-solid.svg" alt="Home button" /> */}
-        <IconButton onClick={handleLogout} aria-label="logout" size="large">
-          <LogoutIcon fontSize="inherit" />
-        </IconButton>
+        {user && (
+          <div>
+            <span className={styles.email}> {user.email}</span>
+            <IconButton
+              sx={{ mr: "2rem" }}
+              onClick={handleLogout}
+              aria-label="logout"
+              size="large"
+            >
+              <LogoutIcon fontSize="inherit" />
+            </IconButton>
+          </div>
+        )}
       </div>
     </header>
   );

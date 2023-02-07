@@ -10,6 +10,10 @@
   padding: 10px 0;
 }
 
+.email {
+  margin-right: 2rem;
+}
+
 .home {
   width: 30px;
   opacity: 0.2;

@@ -1,18 +1,6 @@
 .history {
   margin-top: 5rem;
 }
-
-.records {
-  background-color: #f0f3f5;
-  padding: 20px;
-  border-radius: 5px;
+.record {
   margin: 2rem 0;
-}
-
-.recordHeader {
-  background-color: #6db6eb;
-}
-
-.recordTitle {
-  font-size: 1rem;
 }
