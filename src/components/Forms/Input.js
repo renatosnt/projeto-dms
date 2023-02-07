@@ -9,6 +9,7 @@ const Input = ({
   error,
   onChange,
   placeholder,
+  onBlur,
   ...props
 }) => {
   return (
@@ -24,6 +25,7 @@ const Input = ({
         value={value}
         onChange={onChange}
         placeholder={placeholder}
+        onBlur={onBlur}
         {...props}
       />
       {error && <span className={styles.error}>{error}</span>}

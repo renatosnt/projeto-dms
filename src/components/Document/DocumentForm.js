@@ -116,7 +116,7 @@ const DocumentForm = ({
           label="Telefone"
           name="phone"
           type="tel"
-          placeholder="(99) - 99999-9999"
+          placeholder="(99) 99999-9999"
           {...phoneNumber}
         />
         <Select

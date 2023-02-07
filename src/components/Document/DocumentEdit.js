@@ -24,7 +24,7 @@ const DocumentEdit = () => {
   const name = useForm();
   const gender = useForm();
   const address = useForm();
-  const phoneNumber = useForm();
+  const phoneNumber = useForm("phone");
   const birthDate = useForm();
   const role = useForm();
   const admissionDate = useForm();
@@ -108,12 +108,6 @@ const DocumentEdit = () => {
       <PDFViewer className={styles.pdfViewer}>
         <DocumentPage {...data} />
       </PDFViewer>
-
-      {/* <div className={styles.bg}>
-        <div className={styles.pdfWrapper}>
-          <DocumentPage {...data} />
-        </div>
-      </div> */}
     </div>
   );
 };
