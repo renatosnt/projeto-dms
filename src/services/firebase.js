@@ -11,7 +11,6 @@ const firebaseConfig = {
   messagingSenderId: "873553183830",
   appId: "1:873553183830:web:011a13757994193d7527f7",
   measurementId: "G-VW790BW96N",
-  storageBucket: "gs://projeto-taugor.appspot.com/",
 };
 
 const app = initializeApp(firebaseConfig);

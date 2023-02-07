@@ -1,4 +1,4 @@
-import { collection, getDocs, onSnapshot } from "firebase/firestore";
+import { collection, doc, getDocs, onSnapshot } from "firebase/firestore";
 import React from "react";
 import styles from "./EmployeesTable.module.css";
 import Button from "@mui/material/Button";
@@ -7,15 +7,17 @@ import EditIcon from "@mui/icons-material/Edit";
 import { redirect, useNavigate } from "react-router-dom";
 import AddBoxIcon from "@mui/icons-material/AddBox";
 import { Avatar } from "@mui/material";
-import { db } from "../../services/firebase";
-
+import { auth, db } from "../../services/firebase";
+import { DataGrid } from "@mui/x-data-grid";
 const Employees = () => {
   const [employees, setEmployees] = React.useState([]);
   const navigate = useNavigate();
 
   React.useEffect(() => {
     function getEmployees() {
-      onSnapshot(collection(db, "funcionarios"), (snapshot) => {
+      const uid = auth.currentUser.uid;
+      const docRef = collection(db, "users", uid, "employees");
+      onSnapshot(docRef, (snapshot) => {
         const listOfEmployees = [];
         snapshot.forEach((doc) => {
           listOfEmployees.push({
@@ -30,7 +32,7 @@ const Employees = () => {
             admissionDate: doc.data().admissionDate,
             sector: doc.data().sector,
             salary: doc.data().salary,
-            pdf: doc.data().pdf,
+            active: doc.data().active,
           });
         });
         setEmployees(listOfEmployees);
@@ -40,7 +42,6 @@ const Employees = () => {
   }, []);
 
   function goToEditMode(id) {
-    // TODO pega do firestore o pdf correto pra ser editado, converte pra blob e coloca pra ser editado
     navigate("editar/" + id);
   }
 
@@ -48,12 +49,31 @@ const Employees = () => {
     navigate("criar");
   }
 
+  const columns = [
+    { field: "id", headerName: "ID" },
+    { field: "photo", headerName: "Foto" },
+    { field: "name", headerName: "Nome", width: 300 },
+    { field: "role", headerName: "Cargo", width: 300 },
+    { field: "sector", headerName: "Setor", width: 600 },
+    { field: "salary", headerName: "Salário", width: 600 },
+  ];
+
+  const rows = employees.map((employee) => {
+    return {
+      id: employee.id,
+      photo: employee.photoUrl,
+      name: employee.name,
+      role: employee.role,
+      sector: employee.sector,
+      salary: employee.salary,
+    };
+  });
   return (
     <div className="container">
       <Button onClick={goToCreate} variant="contained" endIcon={<AddBoxIcon />}>
         Adicionar
       </Button>
-      <div className="table-employees">
+      <div className={styles.table} style={{ height: 300, width: "100%" }}>
         <table>
           <thead>
             <tr>
@@ -69,7 +89,7 @@ const Employees = () => {
               <tr key={employee.id}>
                 <td>
                   <Avatar src={employee.photoUrl}></Avatar>
-                  {console.log(employee.photoUrl)}
+                  {console.log(employee.name, employee.photoUrl)}
                 </td>
                 <td>{employee.name}</td>
                 <td>{employee.role}</td>
@@ -91,6 +111,8 @@ const Employees = () => {
             ))}
           </tbody>
         </table>
+
+        {/* <DataGrid rows={rows} columns={columns} /> */}
       </div>
     </div>
   );

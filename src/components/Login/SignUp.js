@@ -1,11 +1,10 @@
 import React from "react";
-import useForm from "../../Hooks/useForm";
+import useForm from "../../hooks/useForm";
 import Button from "../Forms/Button";
 import Input from "../Forms/Input";
 import styles from "./LoginForm.module.css";
-import { createUserWithEmailAndPassword } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
-import { auth } from "../../services/firebase";
+import { createUser } from "../../services/DatabaseService";
 const SignUp = () => {
   const email = useForm();
   const password = useForm();
@@ -15,20 +14,12 @@ const SignUp = () => {
 
   async function handleSignUp(e) {
     e.preventDefault();
-    console.log(email.value);
-    console.log(password.value);
-    console.log(passwordConfirmation.value);
-
-    await createUserWithEmailAndPassword(auth, email.value, password.value)
-      .then((userCredential) => {
-        console.log("registrado ", userCredential);
-        navigate("/funcionarios", { replace: true });
-      })
-      .catch((error) => {
-        console.log("erro ", error.code);
-        if (error.code === "auth/internal-error")
-          setSignUpError("Erro interno.");
-      });
+    // console.log(email.value);
+    // console.log(password.value);
+    // console.log(passwordConfirmation.value);
+    await createUser(email, password, setSignUpError).then(() => {
+      navigate("/funcionarios");
+    });
   }
 
   return (

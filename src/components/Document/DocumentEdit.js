@@ -3,43 +3,22 @@ import DocumentPage from "./DocumentPage";
 import History from "./History";
 
 import styles from "./DocumentEdit.module.css";
-import useForm from "./../../Hooks/useForm";
+import useForm from "../../hooks/useForm";
 import { PDFViewer, pdf } from "@react-pdf/renderer";
 
-import { storage } from "../../services/firebase";
-import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
-
-import {
-  addDoc,
-  arrayUnion,
-  collection,
-  doc,
-  getDoc,
-  onSnapshot,
-  runTransaction,
-  setDoc,
-  updateDoc,
-} from "firebase/firestore";
-import { db } from "../../services/firebase";
 import { useNavigate, useParams } from "react-router-dom";
 
 import DocumentForm from "./DocumentForm";
 import Menu from "./Menu";
-import { getPhotoUrl, uploadPhoto } from "../../services/StorageService";
+import {
+  createEmployee,
+  getEmployeeData,
+  saveRecord,
+  updateEmployee,
+} from "../../services/DatabaseService";
 
-function blobToBase64(blob) {
-  return new Promise((resolve, _) => {
-    const reader = new FileReader();
-    reader.onloadend = () => resolve(reader.result);
-    reader.readAsDataURL(blob);
-  });
-}
-
-async function base64ToBlob(base64) {
-  let response = await fetch(base64);
-  let pdf = await response.blob();
-  return pdf;
-}
+import { uploadPDF, uploadPhoto } from "../../services/StorageService";
+import { getDownloadURL } from "firebase/storage";
 
 const DocumentEdit = () => {
   const name = useForm();
@@ -54,6 +33,7 @@ const DocumentEdit = () => {
 
   const [photo, setPhoto] = React.useState(null);
   const [photoUrl, setPhotoUrl] = React.useState(null);
+  const [active, setActive] = React.useState(true);
 
   const data = {
     name: name.value,
@@ -66,6 +46,7 @@ const DocumentEdit = () => {
     admissionDate: admissionDate.value,
     sector: sector.value,
     salary: salary.value,
+    active: active,
   };
   const dataForm = {
     name: name,
@@ -82,88 +63,28 @@ const DocumentEdit = () => {
   const navigate = useNavigate();
   const { id } = useParams();
 
-  // TODO REFATORAR
   React.useEffect(() => {
-    async function getEmployeeData() {
-      if (id) {
-        const docRef = doc(db, "funcionarios", id);
-        const docSnap = await getDoc(docRef);
-        if (docSnap.exists()) {
-          const pdfBase64 = docSnap.data().pdf;
-          const myBlob = await base64ToBlob(docSnap.data().pdf);
-
-          Object.entries(dataForm).forEach((entry) => {
-            const [key, value] = entry;
-            value.setValue(docSnap.data()[key]);
-          });
-
-          //get photo
-          setPhotoUrl(getPhotoUrl(id));
-          // await getDownloadURL(ref(storage, `employee/${id + ".jpeg"}`)).then(
-          //   (url) => {
-          //     setPhotoUrl(url);
-          //   }
-          // );
-        } else {
-          console.log("funcionario não existe");
-        }
-      } else {
-      }
-    }
-    getEmployeeData();
+    getEmployeeData(id, dataForm, setPhotoUrl);
   }, []);
-  // TODO REFATORAR
 
   async function handleSave(e) {
     e.preventDefault();
-
-    const element = <DocumentPage {...data} />;
-
-    let myPDF = pdf(element);
-    let myBlob = await myPDF.toBlob();
-    let myID = id;
+    let myID = null;
     if (!id) {
-      await blobToBase64(myBlob).then(async (pdf) => {
-        // TODO tem que ser AWAIT
-        const docRef = await addDoc(collection(db, "funcionarios"), {
-          createdAt: new Date().toString(),
-          ...data,
-          pdf,
-        });
-        myID = docRef.id;
-      });
+      myID = await createEmployee(data);
     } else if (id) {
-      await blobToBase64(myBlob).then(async (pdf) => {
-        // TODO tem que ser AWAIT
-        await updateDoc(doc(db, "funcionarios", id), {
-          createdAt: new Date().toString(),
-          ...data,
-          pdf,
-        });
-      });
+      await updateEmployee(id, data);
+      myID = id;
     }
-    // await getDoc(doc(db, "funcionarios", myID)).then((docSnap) => {
-    //   if (docSnap.data().photoUrl !== photoUrl) {
-    //   }
-    // });
     if (photo) {
-      uploadPhoto(photo, myID);
+      await uploadPhoto(photo, myID);
     }
-    const docRef = doc(db, "historico", myID);
-    await setDoc(
-      docRef,
-      {
-        records: arrayUnion({ modifiedAt: new Date().toString(), ...data }),
-      },
-      { merge: true }
-    )
-      .then((response) => {
-        console.log(response);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
 
+    const myBlob = await pdf(<DocumentPage {...data} />).toBlob();
+    console.log("blob", myBlob);
+
+    await uploadPDF(myID, myBlob);
+    await saveRecord(data, myID);
     navigate("/funcionarios");
   }
 
@@ -172,6 +93,8 @@ const DocumentEdit = () => {
       <div className={styles.formWrapper}>
         <Menu id={id} name={`${data.name}`} />
         <DocumentForm
+          id={id}
+          setActive={setActive}
           photoUrl={photoUrl}
           setPhoto={setPhoto}
           handleSave={handleSave}
@@ -185,11 +108,11 @@ const DocumentEdit = () => {
         <DocumentPage {...data} />
       </PDFViewer>
 
-      <div className={styles.bg}>
+      {/* <div className={styles.bg}>
         <div className={styles.pdfWrapper}>
           <DocumentPage {...data} />
         </div>
-      </div>
+      </div> */}
     </div>
   );
 };

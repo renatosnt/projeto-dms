@@ -2,13 +2,17 @@ import React from "react";
 import { Avatar, Button } from "@mui/material";
 import Input from "../Forms/Input";
 
+import { getPDFLink } from "../../services/StorageService";
 import SaveIcon from "@mui/icons-material/Save";
 import styles from "./DocumentForm.module.css";
 import Select from "../Forms/Select";
 import UploadImage from "../Forms/UploadImage";
+import { deleteEmployee } from "../../services/DatabaseService";
+import { useNavigate } from "react-router-dom";
 const DocumentForm = ({
   handleSave,
   name,
+  setActive,
   gender,
   address,
   phoneNumber,
@@ -16,10 +20,38 @@ const DocumentForm = ({
   photoUrl,
   birthDate,
   role,
+  id,
   admissionDate,
   sector,
   salary,
 }) => {
+  const navigate = useNavigate();
+
+  async function downloadPDF() {
+    const link = document.createElement("a");
+    link.setAttribute("download", "");
+    link.href = await getPDFLink(id);
+    link.setAttribute("download", `document.pdf`);
+
+    // Append to html link element page
+    document.body.appendChild(link);
+
+    // Start download
+    link.click();
+
+    // Clean up and remove the link
+    link.parentNode.removeChild(link);
+  }
+
+  async function handleDelete() {
+    deleteEmployee(id);
+    navigate("/funcionarios");
+  }
+
+  async function handleCancelContract() {
+    //TODO
+    setActive(false);
+  }
   return (
     <form className={styles.form} onSubmit={handleSave}>
       <div className={styles.fieldsContainer}>
@@ -103,8 +135,27 @@ const DocumentForm = ({
         />
       </div>
       <div className={styles.saveOptions}>
-        <Button variant="contained" endIcon={<SaveIcon />}>
+        <Button
+          onClick={downloadPDF}
+          variant="contained"
+          endIcon={<SaveIcon />}
+        >
           Baixar PDF
+        </Button>
+        <Button
+          onClick={handleDelete}
+          variant="contained"
+          endIcon={<SaveIcon />}
+        >
+          Excluir
+        </Button>
+
+        <Button
+          onClic={handleCancelContract}
+          variant="contained"
+          endIcon={<SaveIcon />}
+        >
+          Terminar Contrato
         </Button>
         <Button type="submit" variant="contained" endIcon={<SaveIcon />}>
           Salvar

@@ -1,13 +1,16 @@
 import { doc, getDoc } from "firebase/firestore";
 import React from "react";
-import { db } from "../../services/firebase";
+import { auth, db } from "../../services/firebase";
 import styles from "./History.module.css";
 const History = ({ id }) => {
   const [history, setHistory] = React.useState([]);
 
   React.useEffect(() => {
     async function getHistory() {
-      const docRef = doc(db, "historico", id);
+      const uid = auth.currentUser.uid;
+      const docRef = doc(db, "users", uid, "history", id);
+
+      // const docRef = doc(db, "historico", id);
       const docSnap = await getDoc(docRef);
       if (docSnap.exists()) {
         console.log("Document data:", docSnap.data());

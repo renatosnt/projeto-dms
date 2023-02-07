@@ -1,9 +1,8 @@
-import { signInWithEmailAndPassword } from "firebase/auth";
 import React from "react";
 import { useNavigate } from "react-router-dom";
 
-import useForm from "../../Hooks/useForm";
-import { auth } from "../../services/firebase";
+import useForm from "../../hooks/useForm";
+import { loginUser } from "../../services/DatabaseService";
 import Button from "../Forms/Button";
 import Input from "../Forms/Input";
 import styles from "./LoginForm.module.css";
@@ -12,16 +11,12 @@ const LoginForm = () => {
   const email = useForm();
   const password = useForm();
   const navigate = useNavigate();
+
   async function handleLogin(e) {
     e.preventDefault();
-    await signInWithEmailAndPassword(auth, email.value, password.value)
-      .then((userCredential) => {
-        console.log("logado", userCredential);
-        navigate("/funcionarios");
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+    await loginUser(email.value, password.value).then(() => {
+      navigate("/funcionarios");
+    });
   }
 
   return (

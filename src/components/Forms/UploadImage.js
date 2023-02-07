@@ -6,7 +6,6 @@ import React from "react";
 const UploadImage = ({ setPhoto, photoUrl }) => {
   function handleChange(e) {
     if (e.target.files[0]) {
-      console.log(e.target.files[0].name);
       setPhoto(e.target.files[0]);
     }
   }
